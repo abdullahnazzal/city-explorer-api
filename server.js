@@ -14,14 +14,14 @@ server.use(cors());
 
 class Forecast {
     constructor(item) {
-        this.date = item.data[0].datetime;
-        this.description = item.data[0].weather.description;
+        this.date = item.datetime;
+        this.description = item.weather.description;
     }
 }
 
 //localhost:3001/weather?searchQuery=Seattle&lat=47.60621&lon=-122.33207
 server.get('/weather', (req, resp) => {
-    let ForecastArr=[];
+    // let ForecastArr=[];
     // console.log(req.query);
     let cityName = req.query.searchQuery;
     let citylat = req.query.lat;
@@ -35,12 +35,14 @@ server.get('/weather', (req, resp) => {
         }
     })
     try {
-        // let ForecastArr = SelectedCite.data.map((item) => {
-            // console.log(SelectedCite.data[0].weather.description);
-            ForecastArr.push(new Forecast(SelectedCite) );
-            // return new Forecast(SelectedCite)
-        // })
 
+        let ForecastArr = SelectedCite.data.map((item) => {
+            return new Forecast(item);
+        })
+        // console.log(SelectedCite.data[0].weather.description);
+
+        // ForecastArr.push(new Forecast(SelectedCite) );
+        console.log(ForecastArr);
         // resp.send(SelectedCite)
         resp.send(ForecastArr)
     } catch {
@@ -49,7 +51,6 @@ server.get('/weather', (req, resp) => {
     }
 
 
-console.log(ForecastArr);
 })
 
 server.get('*', (req, resp) => {
