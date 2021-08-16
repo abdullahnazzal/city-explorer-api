@@ -20,9 +20,9 @@ No One
 
 -----------------------------
 
-Name of feature: Find an cites with img,latitude,longitude  
+Name of feature: API  
 
-Estimate of time needed to complete: 1 hours
+Estimate of time needed to complete: 2 hours
 
 Start time: 3 
 
