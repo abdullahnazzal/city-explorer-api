@@ -30,4 +30,13 @@ Finish time: 6:30
 
 Actual time needed to complete: 3:30
 
+---------------------------------
+Name of feature: API(weather,movies) 
 
+Estimate of time needed to complete: 3 hours
+
+Start time: 3 
+
+Finish time: 9:30
+
+Actual time needed to complete: 6:30

@@ -14,35 +14,32 @@ const PORT = process.env.PORT;
 
 
 //ROUTES
+//localhost:3001/weather?searchQuery=Seattle
 
 // server.get('/weather', routeshandler);
 server.get('/weather', async (req,res)=>{
-    let cityName = await req.query.searchQuery;
+    let cityName =req.query.searchQuery;
     console.log("cityNamecityNamecityName", cityName);
 
-let url =`https://api.weatherbit.io/v2.0/forecast/daily?city=amman&key=32fb776eafa44a539d4b695d19d4993f&days=5`
+let url =`https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&key=${process.env.WEATHER_KEY}&days=5`
 
     try {
-        let weatherResults = await axios.get(url);
-        // let SelectedCity = weatherResults.find((item) => {
-        //     // console.log(item);
-        //     console.log(item.city_name);
-    
-        //     if (item.city_name.toLowerCase() === cityName.toLowerCase()) {
-        //         // ForecastArr.push(new Forecast(item) );
-        //         return item;
-        //         // console.log(item);
-        //     }
-        //     let ForecastArr = SelectedCity.data.map((item) => {
-        //         return new Forecast(item);
-        //     })
-        // })
+        axios.get(url).then((weatherResults)=>{
 
+            let ForecastArr = weatherResults.data.data.map((item) => {
+                // console.log(weatherResults.date);
+                return new Forecast(item);
+
+            })
+            // console.log(ForecastArr);
+            res.send(ForecastArr);
+        });
         // console.log(weatherResults);
-        res.send(weatherResults);
+        
+        
 
     } catch (error) {
-        console.log("THE REEOR IS :",error);
+        console.log("THE ERROR IS :",error);
         // res.send("error", error);
 
     }
@@ -54,6 +51,51 @@ class Forecast {
         this.description = item.weather.description;
     }
 }
+
+//localhost:3001/movies?searchQuery=Seattle
+
+server.get('/movies', async (req,res)=>{
+    let moviesName =req.query.searchQuery;
+    console.log("moviesNamemoviesName", moviesName);
+
+//    let url= `https://api.themoviedb.org/3/search/movie?api_key=162e2e36e10294f626e2fd389bd221cd&query=Seattle&page=1`
+let url =`https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${moviesName}&page=1`
+console.log(url);
+
+    try {
+        axios.get(url).then((moviesResults)=>{
+            console.log(moviesResults.date);
+            let forMoviesArr = moviesResults.data.results.map((item) => {
+                // console.log(item.original_title);
+                return new ForMovies(item);
+            })
+            // // console.log(forMovies);
+            res.send(forMoviesArr);
+        });
+        res.send(moviesResults);
+        // console.log(weatherResults);
+        
+        
+
+    } catch (error) {
+        console.log("THE ERROR IS :",error);
+        // res.send("error", error);
+
+    }
+});
+
+class ForMovies {
+    constructor(item) {
+        this.title = item.original_title;
+        this.overview = item.overview;
+        this.average_votes = item.vote_average;
+        this.total_votes = item.vote_count;
+        this.image_url = `https://image.tmdb.org/t/p/w500/${item.poster_path}`;
+        this.popularity = item.popularity;
+        this.released_on = item.release_date;
+    }
+}
+
 
 //localhost:3001/weather?searchQuery=Seattle
 
@@ -125,5 +167,5 @@ server.get('*', (req, resp) => {
 
 
 server.listen(PORT, () => {
-    console.log("listing on PORT 3001");
+    console.log(`listing on PORT ${PORT}`);
 })
