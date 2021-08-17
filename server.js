@@ -20,15 +20,19 @@ class Forecast {
 }
 
 //localhost:3001/weather?searchQuery=Seattle&lat=47.60621&lon=-122.33207
+//localhost:3001/weather?searchQuery=Seattle&lat=47.6038321&lon=-122.3300624
 server.get('/weather', (req, resp) => {
     // let ForecastArr=[];
     // console.log(req.query);
     let cityName = req.query.searchQuery;
     let citylat = req.query.lat;
     let citylon = req.query.lon;
-    let SelectedCite = dataInfo.find((item) => {
+    console.log(cityName);
+    let SelectedCity = dataInfo.find((item) => {
         // console.log(item);
-        if (item.city_name === cityName && item.lat === citylat && item.lon === citylon) {
+        console.log(item.city_name);
+
+        if (item.city_name.toLowerCase() === cityName.toLowerCase()) {
             // ForecastArr.push(new Forecast(item) );
             return item;
             // console.log(item);
@@ -36,7 +40,7 @@ server.get('/weather', (req, resp) => {
     })
     try {
 
-        let ForecastArr = SelectedCite.data.map((item) => {
+        let ForecastArr = SelectedCity.data.map((item) => {
             return new Forecast(item);
         })
         // console.log(SelectedCite.data[0].weather.description);
