@@ -1,61 +1,117 @@
 'use strict';
 
 const express = require('express');
-
-const dataInfo = require('./data/weather.json');
-
-require('dotenv').config();
 const cors = require('cors');
+require('dotenv').config();
+const axios = require('axios');
 
 const server = express();
+server.use(cors());
 
 const PORT = process.env.PORT;
-server.use(cors());
+
+
+
+
+//ROUTES
+
+// server.get('/weather', routeshandler);
+server.get('/weather', async (req,res)=>{
+    let cityName = await req.query.searchQuery;
+    console.log("cityNamecityNamecityName", cityName);
+
+let url =`https://api.weatherbit.io/v2.0/forecast/daily?city=amman&key=32fb776eafa44a539d4b695d19d4993f&days=5`
+
+    try {
+        let weatherResults = await axios.get(url);
+        // let SelectedCity = weatherResults.find((item) => {
+        //     // console.log(item);
+        //     console.log(item.city_name);
+    
+        //     if (item.city_name.toLowerCase() === cityName.toLowerCase()) {
+        //         // ForecastArr.push(new Forecast(item) );
+        //         return item;
+        //         // console.log(item);
+        //     }
+        //     let ForecastArr = SelectedCity.data.map((item) => {
+        //         return new Forecast(item);
+        //     })
+        // })
+
+        // console.log(weatherResults);
+        res.send(weatherResults);
+
+    } catch (error) {
+        console.log("THE REEOR IS :",error);
+        // res.send("error", error);
+
+    }
+});
 
 class Forecast {
     constructor(item) {
-        this.date = item.datetime;
+            this.date = item.datetime;
         this.description = item.weather.description;
     }
 }
 
+//localhost:3001/weather?searchQuery=Seattle
+
+
+
+//  function routeshandler(req, res) {
+//     let cityName = req.query.searchQuery;
+    
+//     let url =`https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&key=${process.env.WEATHER_KEY}&days=5`;
+
+//     try {
+//         let weatherResults = await axios.get(url);
+//         console.log("weatherResults.date", weatherResults.date);
+//         res.send(weatherResults.date);
+
+//     } catch (error) {
+//         console.log(error);
+//         res.send("error", error);
+
+//     }
+
+// }
 //localhost:3001/weather?searchQuery=Seattle&lat=47.60621&lon=-122.33207
-//localhost:3001/weather?searchQuery=Seattle&lat=47.6038321&lon=-122.3300624
-server.get('/weather', (req, resp) => {
-    // let ForecastArr=[];
-    // console.log(req.query);
-    let cityName = req.query.searchQuery;
-    let citylat = req.query.lat;
-    let citylon = req.query.lon;
-    console.log(cityName);
-    let SelectedCity = dataInfo.find((item) => {
-        // console.log(item);
-        console.log(item.city_name);
+//localhost:3001/weather?searchQuery=Seattle
+// server.get('/weather', (req, resp) => {
+//     // console.log(req.query);
+//     let cityName = req.query.searchQuery;
+//     // let citylat = req.query.lat;
+//     // let citylon = req.query.lon;
+//     console.log(cityName);
+//     let SelectedCity = dataInfo.find((item) => {
+//         // console.log(item);
+//         console.log(item.city_name);
 
-        if (item.city_name.toLowerCase() === cityName.toLowerCase()) {
-            // ForecastArr.push(new Forecast(item) );
-            return item;
-            // console.log(item);
-        }
-    })
-    try {
+//         if (item.city_name.toLowerCase() === cityName.toLowerCase()) {
+//             // ForecastArr.push(new Forecast(item) );
+//             return item;
+//             // console.log(item);
+//         }
+//     })
+//     try {
 
-        let ForecastArr = SelectedCity.data.map((item) => {
-            return new Forecast(item);
-        })
-        // console.log(SelectedCite.data[0].weather.description);
+//         let ForecastArr = SelectedCity.data.map((item) => {
+//             return new Forecast(item);
+//         })
+//         // console.log(SelectedCite.data[0].weather.description);
 
-        // ForecastArr.push(new Forecast(SelectedCite) );
-        console.log(ForecastArr);
-        // resp.send(SelectedCite)
-        resp.send(ForecastArr)
-    } catch {
+//         // ForecastArr.push(new Forecast(SelectedCite) );
+//         console.log(ForecastArr);
+//         // resp.send(SelectedCite)
+//         resp.send(ForecastArr)
+//     } catch {
 
-        resp.send("NOT FOUND: Error We Can't find your data")
-    }
+//         resp.send("NOT FOUND: Error We Can't find your data")
+//     }
 
 
-})
+// })
 
 server.get('*', (req, resp) => {
 
