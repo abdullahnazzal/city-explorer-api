@@ -40,3 +40,14 @@ Start time: 3
 Finish time: 9:30
 
 Actual time needed to complete: 6:30
+---------------------------------
+Name of feature: Modularizing JavaScript files 
+
+Estimate of time needed to complete: 01 hours
+
+Start time: 3 
+
+Finish time: 3:30
+
+Actual time needed to complete: 00:30 hours
+
