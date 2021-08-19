@@ -50,4 +50,13 @@ Start time: 3
 Finish time: 3:30
 
 Actual time needed to complete: 00:30 hours
+---------------------------------
+Cache external API data in server storage 
 
+Estimate of time needed to complete: 00:15 hour
+
+Start time: 12:30
+
+Finish time: 1:00
+
+Actual time needed to complete: 00:30 hour
