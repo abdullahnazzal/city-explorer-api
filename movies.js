@@ -1,34 +1,42 @@
 'use strict';
 const axios = require('axios');
+let InMemoryMovies = {};
 
 async function getMovies(req, res) {
     let moviesName = req.query.searchQuery;
-    console.log("moviesNamemoviesName", moviesName);
+    // console.log("moviesName moviesName", moviesName);
 
     //    let url= `https://api.themoviedb.org/3/search/movie?api_key=162e2e36e10294f626e2fd389bd221cd&query=Seattle&page=1`
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${moviesName}&page=1`
-    console.log(url);
+    // console.log(url);
 
-    try {
-        axios.get(url).then((moviesResults) => {
-            console.log(moviesResults.date);
-            let forMoviesArr = moviesResults.data.results.map((item) => {
-                // console.log(item.original_title);
-                return new ForMovies(item);
-            })
-            // // console.log(forMovies);
-            res.send(forMoviesArr);
-        });
-        res.send(moviesResults);
-        // console.log(weatherResults);
-
-
-
-    } catch (error) {
-        console.log("THE ERROR IS :", error);
-        // res.send("error", error);
+    if (InMemoryMovies[moviesName] !== undefined) {
+        console.log("Cash hit");
+        res.send(InMemoryMovies[moviesName]);
 
     }
+    else {
+        console.log("Cash miss");
+
+        try {
+            axios.get(url).then((moviesResults) => {
+                // console.log(moviesResults.date);
+                let forMoviesArr = moviesResults.data.results.map((item) => {
+                    // console.log(item.original_title);
+                    return new ForMovies(item);
+                })
+                // // console.log(forMovies);
+                InMemoryMovies[moviesName]=forMoviesArr;
+                res.send(forMoviesArr);
+            });
+            // res.send(moviesResults);
+            // console.log(weatherResults);
+        } catch (error) {
+            console.log("THE ERROR IS :", error);
+            // res.send("error", error);
+        }
+    }
+
 }
 
 class ForMovies {
@@ -43,4 +51,4 @@ class ForMovies {
     }
 }
 
-module.exports=getMovies;
+module.exports = getMovies;
